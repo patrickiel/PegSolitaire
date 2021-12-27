@@ -12,7 +12,6 @@ namespace PegSolitaire
     {
         private static long numberOfFinishedGames;
         private static HashSet<Game> wonGames;
-        private static int counter = 0;
 
         //https://devblogs.microsoft.com/pfxteam/recursion-and-concurrency/
         static void Main(string[] args)
@@ -32,8 +31,6 @@ namespace PegSolitaire
             if (moves.Count == 0)
             {
                 //finished
-                numberOfFinishedGames += 1;
-
                 if (game.Pieces.Count == 1 &&
                     game.Pieces.First() == new Coordinates(4, 4))
                 {
@@ -41,10 +38,11 @@ namespace PegSolitaire
                     Printer.PrintGame(game);
                 }
 
-                counter++;
-                if (counter == 100000)
+                numberOfFinishedGames++;
+
+                if (numberOfFinishedGames % 100000 == 0)
                 {
-                    Debug.Print(Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds.ToString());
+                    Console.WriteLine($"{numberOfFinishedGames}: {Math.Round(Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds, 2)}s");
                 }
             }
             else

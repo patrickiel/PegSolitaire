@@ -13,13 +13,13 @@ namespace PegSolitaire
         {
         }
 
-        public static void Print(Game board)
+        public static void Print(Game game)
         {
-            for (int i = 1; i <= board.SizeY.End - board.SizeY.Start + 1; i++)
+            for (int i = 1; i <= Game.SizeEndY - Game.SizeStartY + 1; i++)
             {
-                string line = new(' ', board.SizeX.End - board.SizeX.Start + 1);
+                string line = new(' ', Game.SizeEndX - Game.SizeStartX + 1);
 
-                foreach (var piece in board.Pieces.Where(p => p.Y == i))
+                foreach (var piece in game.Pieces.Where(p => p.Y == i))
                 {
                     line = line.Remove(piece.X - 1, 1);
                     line = line.Insert(piece.X - 1, "O");

@@ -9,6 +9,11 @@ namespace PegSolitaire
 {
     public class Game
     {
+        public const ushort SizeStartX = 1;
+        public const ushort SizeEndX = 7;
+        public const ushort SizeStartY = 1;
+        public const ushort SizeEndY = 7;
+
         /// <summary>
         /// new game
         /// </summary>
@@ -19,17 +24,11 @@ namespace PegSolitaire
 
         private Game(IEnumerable<Piece> pieces, IEnumerable<Move> moves)
         {
-            Pieces = pieces.ToImmutableList();
-            SizeX = (1, 7);
-            SizeY = (1, 7);
-            Moves = moves == null ? new List<Move>().ToImmutableList() : moves.ToImmutableList();
+            Pieces = pieces.ToList();
+            Moves = moves ?? Enumerable.Empty<Move>();
         }
 
         public ICollection<Piece> Pieces { get; }
-
-        public (ushort Start, ushort End) SizeX { get; }
-
-        public (ushort Start, ushort End) SizeY { get; }
 
         public IEnumerable<Move> Moves { get; }
 
@@ -74,7 +73,7 @@ namespace PegSolitaire
             var x = coordinates.X;
             var y = coordinates.Y;
 
-            return x >= SizeX.Start && y >= SizeX.Start && x <= SizeX.End && y <= SizeX.End &&
+            return x >= SizeStartX && y >= SizeStartY && x <= SizeEndX && y <= SizeEndY &&
                    (x >= 3 && x <= 5 || y >= 3 && y <= 5);
         }
 
@@ -88,26 +87,16 @@ namespace PegSolitaire
             => Pieces.Any(p => p.X == coordinates.X &&
                                p.Y == coordinates.Y);
 
-        public ICollection<Move> GetPossibleMoves()
-        {
-            var result = new List<Move>();
-
-            foreach (var piece in Pieces)
-            {
-                var moves = new List<Move>()
-                {
-                    new Move(piece, 1),
-                    new Move(piece, 2),
-                    new Move(piece, 3),
-                    new Move(piece, 4)
-                }
-                .Where(m => IsValidMove(m));
-
-                result.AddRange(moves);
-            }
-
-            return result;
-        }
+        public ICollection<Move> GetPossibleMoves() 
+            => Pieces.SelectMany(p => new List<Move>()
+                     {
+                         new Move(p, 1),
+                         new Move(p, 2),
+                         new Move(p, 3),
+                         new Move(p, 4)
+                     }
+                     .Where(m => IsValidMove(m)))
+                     .ToList();
 
         public Game PerformMove(Move move)
         {
@@ -118,6 +107,7 @@ namespace PegSolitaire
 
             var moves = Moves.ToList();
             moves.Add(move);
+
             return new Game(pieces, moves);
         }
 
