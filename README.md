@@ -1,0 +1,2 @@
+# PegSolitaire
+Peg Solitaire Solver
