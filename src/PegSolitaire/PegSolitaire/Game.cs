@@ -5,35 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PegSolitaire
+namespace PegSolitaire;
+
+public class Game
 {
-    public class Game
+    public const ushort SizeStartX = 1;
+    public const ushort SizeEndX = 7;
+    public const ushort SizeStartY = 1;
+    public const ushort SizeEndY = 7;
+
+    /// <summary>
+    /// new game
+    /// </summary>
+    private Game()
+        : this(StartLineup.ToHashSet(), null)
     {
-        public const ushort SizeStartX = 1;
-        public const ushort SizeEndX = 7;
-        public const ushort SizeStartY = 1;
-        public const ushort SizeEndY = 7;
+    }
 
-        /// <summary>
-        /// new game
-        /// </summary>
-        public Game()
-            : this(GetStartLineup(), null)
-        {
-        }
+    public static Game NewGame() => new();
 
-        private Game(IEnumerable<Piece> pieces, IEnumerable<Move> moves)
-        {
-            Pieces = pieces.ToList();
-            Moves = moves ?? Enumerable.Empty<Move>();
-        }
+    public static Game FirstMoveGiven()
+        => new Game().PerformMove(new Move(new Piece(6, 4), 4));
 
-        public ICollection<Piece> Pieces { get; }
+    private Game(HashSet<Piece> pieces, IEnumerable<Move> moves)
+    {
+        Pieces = pieces;
+        Moves = moves ?? Enumerable.Empty<Move>();
+    }
 
-        public IEnumerable<Move> Moves { get; }
+    public HashSet<Piece> Pieces { get; }
 
-        public static IEnumerable<Piece> GetStartLineup()
-            => new List<Piece>() {
+    public IEnumerable<Move> Moves { get; }
+
+    public static IEnumerable<Piece> StartLineup
+        => new List<Piece>() {
                 new Piece(3,1),
                 new Piece(4,1),
                 new Piece(5,1),
@@ -66,52 +71,59 @@ namespace PegSolitaire
                 new Piece(3,7),
                 new Piece(4,7),
                 new Piece(5,7)
-             };
+         };
 
-        public bool IsSlot(Coordinates coordinates)
-        {
-            var x = coordinates.X;
-            var y = coordinates.Y;
+    public static bool IsSlot(Coordinates coordinates)
+        => coordinates.X >= SizeStartX && coordinates.Y >= SizeStartY && coordinates.X <= SizeEndX && coordinates.Y <= SizeEndY &&
+           (coordinates.X >= 3 && coordinates.X <= 5 || coordinates.Y >= 3 && coordinates.Y <= 5);
 
-            return x >= SizeStartX && y >= SizeStartY && x <= SizeEndX && y <= SizeEndY &&
-                   (x >= 3 && x <= 5 || y >= 3 && y <= 5);
-        }
+    public bool IsValidMove(Move move)
+        => IsSlot(move.End) &&
+           !PieceIsPresent(move.End) &&
+           PieceIsPresent(move.Middle);
 
-        public bool IsValidMove(Move move)
-            => IsSlot(move.End) &&
-               !PieceIsPresent(move.End) &&
-               IsSlot(move.Middle) &&
-               PieceIsPresent(move.Middle);
+    public bool PieceIsPresent(Coordinates coordinates)
+        => Pieces.Contains(new Piece(coordinates));
 
-        public bool PieceIsPresent(Coordinates coordinates)
-            => Pieces.Any(p => p.X == coordinates.X &&
-                               p.Y == coordinates.Y);
-
-        public ICollection<Move> GetPossibleMoves() 
-            => Pieces.SelectMany(p => new List<Move>()
-                     {
+    public ICollection<Move> GetPossibleMoves()
+        => Pieces.SelectMany(p => new List<Move>()
+                 {
                          new Move(p, 1),
                          new Move(p, 2),
                          new Move(p, 3),
                          new Move(p, 4)
-                     }
-                     .Where(m => IsValidMove(m)))
-                     .ToList();
+                 }
+                 .Where(m => IsValidMove(m)))
+                 .ToList();
 
-        public Game PerformMove(Move move)
+    public Game PerformMove(Move move)
+    {
+        List<Piece> pieces = new(Pieces);
+#if DEBUG
+            ValidateMove();
+#endif
+        pieces.Remove(new Piece(move.Start));
+        pieces.Remove(new Piece(move.Middle));
+        pieces.Add(new Piece(move.End));
+
+        var moves = Moves.ToList();
+        moves.Add(move);
+
+        return new Game(pieces.ToHashSet(), moves);
+
+        void ValidateMove()
         {
-            var pieces = Pieces.ToList();
-            pieces.Remove(new Piece(move.Start));
-            pieces.Remove(new Piece(move.Middle));
-            pieces.Add(new Piece(move.End));
+            if (!pieces.Contains(new Piece(move.Start)))
+                throw new Exception($"Missing or multiple pieces at {move.Start}!");
 
-            var moves = Moves.ToList();
-            moves.Add(move);
+            if (!pieces.Contains(new Piece(move.Middle)))
+                throw new Exception($"Missing or multiple pieces at {move.Middle}!");
 
-            return new Game(pieces, moves);
+            if (pieces.Contains(new Piece(move.End)))
+                throw new Exception($"Occupied slot at {move.End}!");
         }
-
-        public override string ToString()
-            => $"pieces: {string.Join(" ", Pieces.Select(p => p.ToString()))}, moves: {string.Join(" ", Moves.Select(p => p.ToString()))}";
     }
+
+    public override string ToString()
+        => $"pieces: {string.Join(" ", Pieces.Select(p => p.ToString()))}, moves: {string.Join(" ", Moves.Select(p => p.ToString()))}";
 }
