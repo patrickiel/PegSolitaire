@@ -7,7 +7,7 @@
 ![Peg solitaire](https://upload.wikimedia.org/wikipedia/commons/d/df/Solitaire.JPG)
 
 ## The motivation
-The idea behind this project was to find all possible solutions using brute force of peg solitaires.
+The idea behind this project was to find all possible solutions using brute force.
 There are two implementations, synchronous and asynchronous, with modern CPUs the asynchronous approach is much faster.
 
 I stopped the program after 1,290,316,532 finished games and got 210,890 solutions, feel free to complete the calculations on your machine.
