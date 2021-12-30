@@ -4,7 +4,7 @@
 
 [Peg solitaire on Wikipedia](https://en.wikipedia.org/wiki/Peg_solitaire)
 
-![Peg solitaire](https://upload.wikimedia.org/wikipedia/commons/d/df/Solitaire.JPG)
+![peg solitaire](https://user-images.githubusercontent.com/86125971/147757755-3df00887-820f-4312-bab7-aa596b476f8b.jpeg)
 
 ## The motivation
 I currently rediscovered one of my favourite games of my childhood. The idea behind this project was to find all possible solutions using brute force.
@@ -31,6 +31,7 @@ One calculated solution is as follows:
 2│       ○  ○  ○       │
 1│       ○  ○  ○       │
  └─────────────────────┘
+
    1  2  3  4  5  6  7
 
  2. move: (5,6)=>(5,4)
@@ -394,5 +395,3 @@ One calculated solution is as follows:
    1  2  3  4  5  6  7
 
 ```
- 
-[Source of Image file](https://commons.wikimedia.org/wiki/File:Solitaire.JPG)
