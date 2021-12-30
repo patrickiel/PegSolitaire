@@ -10,6 +10,11 @@
 The idea behind this project was to find all possible solutions using brute force.
 There are two implementations, synchronous and asynchronous, with modern CPUs the asynchronous approach is much faster.
 
+## Simplification
+There are four possible moves at the beginning, but they are basically all the same when you rotate the board!
+Therefore I have predefined the first move (6,4)=>(4,4)
+
+## The calculation
 I stopped the program after 1,290,316,532 finished games and got 210,890 solutions, feel free to complete the calculations on your machine.
 One calculated solution is as follows:
 
