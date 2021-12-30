@@ -1,73 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace PegSolitaire;
+﻿namespace PegSolitaire;
 
 class Program
 {
-    private static long numberOfFinishedGames = 0;
-    private static List<Game> wonGames;
-
     static void Main(string[] args)
     {
-        wonGames = new List<Game>();
-        Logger logger = new();
-        Play(Game.FirstMoveGiven(), logger);
-        logger.Print("TOTAL FINISHED GAMES: " + numberOfFinishedGames);
-        logger.Print("TOTAL WON GAMES: " + wonGames.Count);
-        Console.Read();
+        Console.WriteLine($"How many solutions do you want to find, hit [Enter] to find ALL solutions (This may take a long time! Enter a small number if you don't want to wait):");
+        var isValid1 = int.TryParse(Console.ReadLine(), out int inputNumberOfSolutionsToFind);
+        int? numberOfSolutionsToFind = isValid1 ? inputNumberOfSolutionsToFind : null;
+
+        var useAsync = true; // change to false if you want to solve synchronously
+        var solvedGames = useAsync 
+            ? new SolverAsync(8, TimeSpan.FromSeconds(2)).GetSolutions(numberOfSolutionsToFind) 
+            : SolverSync.GetSolutions();
+
+        Console.WriteLine($"Finished, number of found solutions: {solvedGames.Count}");
+
+        PrintSolutions(solvedGames);
     }
 
-    private static void Play(Game startingGame, Logger logger)
+    private static void PrintSolutions(List<Game> solvedGames)
     {
-        WorkDivider<Game> workDivider = new(4);
-        workDivider.Add(startingGame);
+        var printer = new Printer();
 
-        while (workDivider.HasWork())
+        while (true)
         {
-            Game game = workDivider.Get();
-            var moves = game.GetPossibleMoves();
+            Console.WriteLine($"Enter a number form 1 to {solvedGames.Count} to print the desired solution:");
+            var isValid2 = int.TryParse(Console.ReadLine(), out int index);
 
-            if (moves.Count == 0)
+            if (isValid2 && index > 0 && index <= solvedGames.Count)
             {
-                //finished
-                numberOfFinishedGames++;
-
-                if (game.Pieces.Count == 1 &&
-                    game.Pieces.First() == new Piece(4, 4))
-                {
-                    wonGames.Add(game);
-                    logger.Print($"Game won after {GetTotalSeconds()}, game number {numberOfFinishedGames}, {game}");
-#if DEBUG
-                        logger.Render(game);
-#endif
-                }
-
-                if (numberOfFinishedGames % 100000 == 0)
-                {
-                    logger.Print($"{numberOfFinishedGames}: {GetTotalSeconds()}");
-                }
-            }
-            else
-            {
-                //unfinished
-                foreach (var move in moves)
-                {
-                    workDivider.Add(game.PerformMove(move));
-                }
+                printer.Render(solvedGames[index - 1]);
             }
         }
-    }
-
-    private static string GetTotalSeconds()
-    {
-        int numberOfDigits = 2;
-        return $"{Math.Round(Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds, numberOfDigits).ToString($"0.{new string('0', numberOfDigits)}")}s";
     }
 }

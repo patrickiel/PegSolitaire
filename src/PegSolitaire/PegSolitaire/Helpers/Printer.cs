@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PegSolitaire;
 
-namespace PegSolitaire;
-
-public class Logger
+public class Printer
 {
     private readonly string filePath;
-    private long numberOfFinishedGames;
 
-    public Logger()
+    public Printer()
     {
         filePath = Path.GetTempFileName() + ".txt";
-        File.WriteAllText(filePath, "Searching solutions..." + Environment.NewLine);
+        File.WriteAllText(filePath, string.Empty);
 
         new Process
         {
@@ -62,19 +53,6 @@ public class Logger
             sb.AppendLine("   1  2  3  4  5  6  7");
 
             File.AppendAllText(filePath, sb.ToString());
-        }
-    }
-
-    public void Print(string value)
-        => File.AppendAllText(filePath, Environment.NewLine + value);
-
-    public void WriteProgress()
-    {
-        numberOfFinishedGames++;
-
-        if (numberOfFinishedGames % 100000 == 0)
-        {
-            Console.WriteLine($"{numberOfFinishedGames}: {Math.Round(Process.GetCurrentProcess().TotalProcessorTime.TotalSeconds, 2)}s");
         }
     }
 }

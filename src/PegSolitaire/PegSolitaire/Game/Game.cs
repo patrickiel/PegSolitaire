@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PegSolitaire;
+﻿namespace PegSolitaire;
 
 public class Game
 {
@@ -27,15 +20,15 @@ public class Game
     public static Game FirstMoveGiven()
         => new Game().PerformMove(new Move(new Piece(6, 4), 4));
 
-    private Game(HashSet<Piece> pieces, IEnumerable<Move> moves)
+    private Game(HashSet<Piece> pieces, List<Move> moves)
     {
         Pieces = pieces;
-        Moves = moves ?? Enumerable.Empty<Move>();
+        Moves = moves ?? new List<Move>();
     }
 
     public HashSet<Piece> Pieces { get; }
 
-    public IEnumerable<Move> Moves { get; }
+    public List<Move> Moves { get; }
 
     public static IEnumerable<Piece> StartLineup
         => new List<Piece>() {

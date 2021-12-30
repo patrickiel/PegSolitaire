@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PegSolitaire;
+﻿namespace PegSolitaire;
 
 public class Move
 {
