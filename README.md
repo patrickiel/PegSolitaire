@@ -2,7 +2,7 @@
 
 ## About the game
 
-[Peg solitaire on Wikipedia](https://commons.wikimedia.org/wiki/File:Solitaire.JPG)
+[Peg solitaire on Wikipedia](https://en.wikipedia.org/wiki/Peg_solitaire)
 
 ![Peg solitaire](https://upload.wikimedia.org/wikipedia/commons/d/df/Solitaire.JPG)
 
