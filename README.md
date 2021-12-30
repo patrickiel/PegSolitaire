@@ -1,4 +1,12 @@
 # PegSolitaire
+
+## About the game
+
+[Peg solitaire on Wikipedia](https://commons.wikimedia.org/wiki/File:Solitaire.JPG)
+
+![Peg solitaire](https://upload.wikimedia.org/wikipedia/commons/d/df/Solitaire.JPG)
+
+## The motivation
 The idea behind this project was to find all possible solutions using brute force of peg solitaires.
 There are two implementations, synchronous and asynchronous, with modern CPUs the asynchronous approach is much faster.
 
@@ -378,3 +386,5 @@ Due to time constraints I stopped the program after _ finished games and _ found
    1  2  3  4  5  6  7
 
 ```
+ 
+[Source of Image file](https://commons.wikimedia.org/wiki/File:Solitaire.JPG)
