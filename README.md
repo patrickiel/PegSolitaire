@@ -10,7 +10,7 @@
 The idea behind this project was to find all possible solutions using brute force of peg solitaires.
 There are two implementations, synchronous and asynchronous, with modern CPUs the asynchronous approach is much faster.
 
-I stopped the program after 1,290,316,532 finished games and 210,890 found solutions, feel free to complete the calculations on your machine.
+I stopped the program after 1,290,316,532 finished games and got 210,890 solutions, feel free to complete the calculations on your machine.
 One calculated solution is as follows:
 
 ```
