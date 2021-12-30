@@ -7,7 +7,7 @@
 ![Peg solitaire](https://upload.wikimedia.org/wikipedia/commons/d/df/Solitaire.JPG)
 
 ## The motivation
-The idea behind this project was to find all possible solutions using brute force.
+I currently redescovered one of my favourite games of my childhood. The idea behind this project was to find all possible solutions using brute force.
 There are two implementations, synchronous and asynchronous, with modern CPUs the asynchronous approach is much faster.
 
 ## Simplification
