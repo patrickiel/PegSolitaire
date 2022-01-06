@@ -15,8 +15,7 @@ There are four possible moves at the beginning, but they are basically all the s
 Therefore I have predefined the first move (6,4)=>(4,4)
 
 ## The calculation
-I stopped the program after 1,500,330,494 finished games and got 223,354 solutions, at a rate of 240,000 finished games per second. 
-Feel free to complete the calculations on your machine!
+I stopped the program after 1,500,330,494 finished games and got 223,354 solutions, at a rate of 240,000 finished games per second.
 
 One calculated solution is as follows:
 
